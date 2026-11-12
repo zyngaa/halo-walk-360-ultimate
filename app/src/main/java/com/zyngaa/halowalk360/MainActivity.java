@@ -27,6 +27,6 @@ public class MainActivity extends AppCompatActivity {
         settings.setAllowUniversalAccessFromFileURLs(true);
 
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("file:///android_asset/halo_walk_360_intimate/index.html");
+        webView.loadUrl("file:///android_asset/halo_walk_360_ultimate/index.html");
     }
 }

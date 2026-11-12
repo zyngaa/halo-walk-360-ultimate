@@ -1,4 +1,4 @@
-# Halo Walk 360: Intimate
+# Halo Walk 360 Ultimate
 
 This repository contains a minimal Android app that presents a cinematic, intimate 360° walking experience in a local WebView-based scene.
 
@@ -12,9 +12,9 @@ This repository contains a minimal Android app that presents a cinematic, intima
 
 ## Files
 
-- `app/src/main/assets/halo_walk_360_intimate/` contains the immersive HTML/CSS/JS scene.
+- `app/src/main/assets/halo_walk_360_ultimate/` contains the immersive HTML/CSS/JS scene.
 - `app/src/main/java/com/zyngaa/halowalk360/MainActivity.java` loads the scene in a full-screen WebView.
 
 ## Notes
 
-This environment does not expose a native Android build toolchain, so an APK binary cannot be generated directly here. The project is set up so that the APK can be produced locally from Android Studio in a standard Android development environment.
+The project requires an Android development environment with a compatible Gradle installation and Android SDK.

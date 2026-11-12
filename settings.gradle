@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HaloWalk360"
+rootProject.name = "HaloWalk360Ultimate"
 include ':app'

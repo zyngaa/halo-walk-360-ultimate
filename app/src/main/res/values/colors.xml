@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="halo_dark">#080b10</color>
+    <color name="halo_accent">#d7b38b</color>
+    <color name="halo_soft">#f3dbc3</color>
+    <color name="halo_deep">#1a1b2f</color>
+</resources>

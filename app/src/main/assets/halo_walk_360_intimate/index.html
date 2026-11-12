@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Halo Walk 360 - Intimate</title>
+  <style>
+    :root {
+      --bg-dark: #070b12;
+      --bg-mid: #111a2a;
+      --glow-1: #ebc89b;
+      --glow-2: #d9a574;
+      --glow-3: #8164a6;
+      --text-soft: #f7ebdf;
+      --text-muted: rgba(247, 235, 223, 0.72);
+      --panel: rgba(15, 18, 30, 0.42);
+      --panel-border: rgba(255, 255, 255, 0.14);
+      --scene-angle: 0deg;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", sans-serif;
+      background: radial-gradient(circle at center, #171b2f 0%, #0a0d16 38%, #05070d 100%);
+      color: var(--text-soft);
+    }
+
+    body {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.04em;
+    }
+
+    .scene {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(236, 201, 156, 0.24), transparent 28%),
+        linear-gradient(180deg, rgba(18, 20, 34, 0.56), rgba(5, 6, 12, 0.9));
+    }
+
+    .panorama {
+      position: absolute;
+      inset: -8%;
+      transform: rotateY(var(--scene-angle)) scale(1.2);
+      transition: transform 0.7s ease;
+      filter: saturate(1.1) brightness(1.05);
+    }
+
+    .panorama::before,
+    .panorama::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .panorama::before {
+      background-image:
+        radial-gradient(circle at 50% 42%, rgba(255, 210, 150, 0.22), transparent 18%),
+        linear-gradient(90deg, rgba(14, 17, 26, 0.78), rgba(34, 28, 38, 0.22) 22%, rgba(15, 16, 20, 0.64) 50%, rgba(34, 28, 38, 0.22) 78%, rgba(14, 17, 26, 0.78)),
+        linear-gradient(180deg, rgba(94, 98, 138, 0.22), rgba(16, 18, 26, 0.95)),
+        radial-gradient(circle at 20% 65%, rgba(236, 195, 144, 0.15), transparent 18%),
+        radial-gradient(circle at 75% 60%, rgba(117, 118, 206, 0.18), transparent 20%);
+      opacity: 0.95;
+    }
+
+    .panorama::after {
+      background-image:
+        radial-gradient(circle at 10% 28%, rgba(240, 205, 158, 0.12), transparent 10%),
+        radial-gradient(circle at 34% 30%, rgba(212, 152, 102, 0.12), transparent 12%),
+        radial-gradient(circle at 58% 34%, rgba(165, 126, 208, 0.12), transparent 12%),
+        radial-gradient(circle at 82% 26%, rgba(240, 205, 158, 0.12), transparent 10%),
+        linear-gradient(180deg, transparent 0%, rgba(4,4,8,0.12) 100%);
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+    }
+
+    .mist {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.34));
+      mix-blend-mode: screen;
+      opacity: 0.8;
+    }
+
+    .glow {
+      position: absolute;
+      width: 46vw;
+      height: 46vw;
+      border-radius: 50%;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(239, 193, 131, 0.4), rgba(123, 89, 174, 0.18), transparent 66%);
+      filter: blur(34px);
+      opacity: 0.9;
+    }
+
+    .hud {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px 20px 24px 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .brand {
+      font-size: 12px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      opacity: 0.74;
+    }
+
+    .status {
+      padding: 8px 12px;
+      border: 1px solid var(--panel-border);
+      background: rgba(12, 14, 25, 0.28);
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: min(80vw, 420px);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.44em;
+      text-transform: uppercase;
+      color: rgba(247, 235, 223, 0.68);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-weight: 300;
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 0.96;
+      text-shadow: 0 0 18px rgba(238, 212, 170, 0.28);
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      color: var(--text-muted);
+      font-size: 13px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      pointer-events: none;
+    }
+
+    .steps {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      border: 1px solid var(--panel-border);
+      background: rgba(12, 14, 25, 0.26);
+      backdrop-filter: blur(4px);
+      border-radius: 999px;
+    }
+
+    .step {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+      transition: all 0.25s ease;
+    }
+
+    .step.active {
+      width: 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--glow-1), var(--glow-2));
+      box-shadow: 0 0 18px rgba(236, 197, 141, 0.5);
+    }
+
+    .caption {
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      max-width: 140px;
+      text-align: right;
+    }
+
+    @media (max-width: 640px) {
+      .bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .caption {
+        text-align: left;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene" id="scene">
+    <div class="panorama" id="panorama"></div>
+    <div class="mist"></div>
+    <div class="glow"></div>
+
+    <div class="hud">
+      <div class="topbar">
+        <div class="brand">Halo Walk</div>
+        <div class="status">Intimate</div>
+      </div>
+
+      <div class="center">
+        <div class="kicker">Atmospheric 360°</div>
+        <h1>Halo</h1>
+        <div class="subtitle">Step softly into the glow</div>
+      </div>
+
+      <div class="bottom">
+        <div class="steps">
+          <span class="step active"></span>
+          <span class="step"></span>
+          <span class="step"></span>
+          <span class="step"></span>
+        </div>
+        <div class="caption">Arrival • Awakening • Intimacy • Return</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const scene = document.getElementById('scene');
+    const panorama = document.getElementById('panorama');
+    const steps = [...document.querySelectorAll('.step')];
+    const h1 = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    const status = document.querySelector('.status');
+
+    const moods = [
+      { label: 'Arrival', glow: '#f0c79c', tone: '#fce5cb', title: 'Halo', subtitle: 'Step softly into the glow' },
+      { label: 'Awakening', glow: '#d29b75', tone: '#f2d8ba', title: 'Drift', subtitle: 'The room starts to breathe' },
+      { label: 'Intimacy', glow: '#a27bbd', tone: '#ead9ff', title: 'Linger', subtitle: 'The light settles against you' },
+      { label: 'Return', glow: '#a8c8d8', tone: '#dfeffd', title: 'Quiet', subtitle: 'Leave with the softness still moving' }
+    ];
+
+    let currentIndex = 0;
+    let dragging = false;
+
+    function updateMood(index) {
+      const mood = moods[index];
+      currentIndex = index;
+      document.documentElement.style.setProperty('--scene-angle', `${(index * 50) - 40}deg`);
+      scene.style.background = `radial-gradient(circle at 50% 42%, ${mood.glow}33, transparent 28%), linear-gradient(180deg, rgba(18, 20, 34, 0.56), rgba(5, 6, 12, 0.9))`;
+      h1.textContent = mood.title;
+      subtitle.textContent = mood.subtitle;
+      status.textContent = mood.label;
+
+      steps.forEach((step, i) => step.classList.toggle('active', i === index));
+    }
+
+    scene.addEventListener('pointerdown', (event) => {
+      dragging = true;
+      scene.setPointerCapture(event.pointerId);
+    });
+
+    scene.addEventListener('pointerup', () => {
+      dragging = false;
+    });
+
+    scene.addEventListener('pointerleave', () => {
+      dragging = false;
+    });
+
+    scene.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      const x = event.clientX / window.innerWidth;
+      const angle = (x - 0.5) * 100;
+      document.documentElement.style.setProperty('--scene-angle', `${angle}deg`);
+    });
+
+    setInterval(() => {
+      if (dragging) return;
+      const next = (currentIndex + 1) % moods.length;
+      updateMood(next);
+    }, 4800);
+
+    updateMood(0);
+  </script>
+</body>
+</html>
